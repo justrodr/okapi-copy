@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>
+      Dear <%= @user.first_name %> <%= @user.last_name %>,
+      <br>
+      Our records indicate that your subscription for the property with the address <%=@property.address%> is about to expire. 
+      Please login to your Okapi dashboard over the next 7 days to confirm the renewal of your subscription. 
+      If no action is taken, your subscription will be cancelled. 
+      <br>
+      <br>
+      Thank you,
+      <br>
+      Okapi Home Management
+
+    </p>
+  </body>
+</html>

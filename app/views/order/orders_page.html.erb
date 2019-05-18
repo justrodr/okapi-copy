@@ -1,0 +1,99 @@
+<style>
+
+.table tr {
+    cursor: pointer;
+}
+.hiddenRow {
+    padding: 0 4px !important;
+    background-color: #eeeeee;
+    font-size: 13px;
+}
+</style>
+
+<% count = 0 %>
+
+<%session[:order] = @order%>
+
+
+<div class="d-flex" id="wrapper">
+    <%= render 'shared/navbar'%>
+<!-- Collapsable Table -->
+<div class="p-4 col-lg-8">
+<div class="container rounded" style="border:2px solid #426EDB;">
+    <table class="table table-condensed" style="border-collapse:collapse;">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th><%= sort_link "tenant_name", "Tenant &#8597"%></th>
+                <th><%= sort_link "shipping_address", "Address &#8597"%></th>
+                <th>Deliver Date</th>
+                <th>Cost</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% @all_orders.each do |order| %>
+                <tr data-toggle="collapse" data-target = "#collapse<%= order.id %>" class="accordion-toggle">
+                    <% count += 1 %>
+                    <% if order.canceled == true %>
+                        <td><%=count%></td>
+                        <td><s><%=order.tenant_name%></s></td>
+                        <td><s><%= order.shipping_address %></s></td>
+                        <td><s><%=order.delivered_date%></s></td>
+                        <td><s><%= "$#{'%.2f' % order.price}"%></s></td>
+                        <td><small class="text-muted">Subscription Cancelled</small></td>
+                    <%else%>
+                        <td><%=count%></td>
+                        <td><%=order.tenant_name%></td>
+                        <td><%= order.shipping_address %></td>
+                        <td><%=order.delivered_date%></td>
+                        <td class="text-success"><%= "$#{'%.2f' % order.price}"%></td>
+                        <td>
+                            <%= form_for(order, url: cancel_path(order) ,method: :get) do |c| %>
+                                <%= c.submit "Cancel Subscription", class:"btn btn-danger btn-sm", data: { confirm: "Are you sure you want to cancel this subscription? \nOrders for this property will not be fulfilled."}%>
+                            <%end%>
+                        </td>
+                    <%end%>
+                </tr>
+
+
+
+                <!-- Collapse Info -->
+                <% small_keys = [] %>
+                <% keys = order.attributes.keys%>
+                    <% keys.each do |subs| %>
+                        <% if subs.include? "size" %>
+                            <% small_keys.push subs %>
+                        <%end%>
+                    <% end %>
+
+
+                <tr >
+                    <td colspan="6" class="hiddenRow">
+                        <div class="accordian-body collapse" id="collapse<%= order.id %>"> 
+                            <% small_keys.each do |key|%>
+                                <% if(order.attributes[key]) %>
+                                    <%="Size: #{session[:sizes][key]}"%>
+                                    <br>
+                                    <%= "Quantity: #{order.attributes[key]}" %>
+                                    <br>
+                                    <%= "Price: $#{'%.2f' % (session[:price_hash][key]*order.attributes[key])}" %>
+                                    <br>
+                                    <br>
+                                <% end %>
+                            <% end %> 
+                            Shipping: $7.00
+                        <br>
+                        <%= "Total Cost: $#{'%.2f'% order.price}" %> 
+                        </div>
+                    </td>
+                </tr>
+            <% end %>		
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+</div>
+

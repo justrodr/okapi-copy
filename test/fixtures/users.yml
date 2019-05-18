@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 30
+  first_name: "Hunter"
+  last_name: "Hewitt"
+  email: "hunterhewitt@tamu.edu"
+  encrypted_password: "MyString"
+
+two:
+  first_name: MyString
+  last_name: MyString
+  email: MyString2
+  encrypted_password: MyString
+
+three:
+  first_name: MyString
+  last_name: MyString
+  email: MyString4
+  encrypted_password: MyString
+  admin: true

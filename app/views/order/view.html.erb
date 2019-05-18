@@ -1,0 +1,306 @@
+<style>
+  h4{
+        color: #253858;
+        margin-bottom: .8rem;
+        position: relative;
+        font-family: 'Raleway', sans-serif;
+        font-size: 1.5rem;
+    }
+    p{
+        margin-top: 0;
+        margin-bottom: 1rem;
+        display: block;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        color: rgb(113, 120, 126);
+        font-family: 'Lato', sans-serif;
+    }
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+    .btn-primary {
+        color: #fff;
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+    .btn-round {
+        border-radius: 30px !important;
+        text-decoration: none;
+    }
+
+    .btn {
+        font-size: 15px;
+        font-weight: 600;
+        padding: 9px 25px;
+        border-width: 2px;
+        box-shadow: 0 3px 8px 0 rgba(41,49,89,.15), inset 0 0 0 1px hsla(0,0%,100%,.1);
+    }
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    .btn:not(:disabled):not(.disabled) {
+        cursor: pointer;
+    }
+    /*[404 error page]
+--------------------------*/
+    .error-content {
+        padding: 0 0 70px;
+    }
+    .error-text{
+        text-align: center;
+    }
+    .error {
+        font-size: 180px;
+        font-weight: 100;
+    }
+</style>
+
+
+
+<% order_count = 0 %>
+<% unit_cost = 0 %>
+<% sub_total = 0 %>
+<% sub_multiplier = 0%>
+<% original_total = 0%>
+<%@order = session[:order]%>
+
+<%if session[:order].nil? %>
+    <div class="error-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="error-text">
+                    <h1 class="error">404 Error</h1>
+                    <h4>Oops! This Page Could Not Be Found!</h4>
+                    <p>Sorry the page you are looking for does not exist, has been removed or name changed.</p>
+                    <%= link_to "Go back to Dashboard", dash_path, method: :get, class: "btn btn-primary btn-round" %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%else%>
+
+<% small_keys = [] %>
+<% keys = @order.attributes.keys%>
+    <% keys.each do |subs| %>
+        <% if subs.include? "size" %>
+            <% small_keys.push subs %>
+        <%end%>
+    <% end %>
+
+<div class="container">
+  <div class="row">
+    <!-- Invoice -->
+      <div class="p-4 col-md-8">
+          <%# <div class="row"> %>
+              <div class="col-12">
+                  <div class="card" style="border:2px solid #426EDB;">
+                      <div class="card-body p-0">
+                          <div class="row p-5">
+                              <h4>Subscription Invoice for <%= @order.shipping_address %></h4>
+                              
+                          </div>
+
+                          <hr class="my-1">
+                          <div class="row pb-2 p-5">
+                              <div class="col-md-6">
+                                  <p class="font-weight-bold mb-2">Property Info</p>
+                                  <p class="mb-1"><%= @order.tenant_name %></p>
+                                
+                                  <p class="mb-1"><%= @order.shipping_address %> </p>
+                                  <p class="mb-1"><%= @order.city %>, <%= @order.state %> <%= @order.zipcode %> </p>
+                                  <p class="mb-1">United States</p>
+                              </div>
+
+                              <div class="col-md-6 text-right">
+                                  <p class="font-weight-bold mb-2">Order Details</p>
+                                  <p class="mb-1"><span class="text-muted">Ship on: </span> <%= @order.start_date %></p>
+                                  <% if @order.sub_freq != 0 %>
+                                    <p class="mb-1"><span class="text-muted">Frequency: </span> Every <%= @order.filter_freq%> month(s)</p>
+                                  <% else %> 
+                                    <p class="mb-1"><span class="text-muted">One Time Purchase: </span>
+                                  <%end%>
+                                  <% if @order.sub_freq != 0 %>
+                                    <p class="mb-1"><span class="text-muted">Subscription:  </span> Every <%= @order.sub_freq%> month(s) </p>
+                                  <% end %>
+                                  <p class="mb-1"><span class="text-muted"><%= User.find_by(email: session[:email]).first_name%> <%= User.find_by(email: session[:email]).last_name%></span> </p>
+                              </div>
+                          </div>
+
+                          <div class="row p-2">
+                              <div class="col-md-12">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th class="border-0 text-uppercase small font-weight-bold">Item No.</th>
+                                              <th class="border-0 text-uppercase small font-weight-bold">Filter Size</th>
+                                              <th class="border-0 text-uppercase small font-weight-bold">Quantity</th>
+                                              <th class="border-0 text-uppercase small font-weight-bold">Unit Cost</th>
+                                              <th class="border-0 text-uppercase small font-weight-bold">Total</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <% small_keys.each do |key|%>
+                                            <% order_count += 1 %>
+                                            <tr>
+                                                <% if(@order.attributes[key]) %>
+                                                    <td><%=order_count%></td>
+                                                    <td><%="#{session[:sizes][key]}" %></td>
+                                                    <td><%= "#{@order.attributes[key]} units" %></td>
+                                                    <% unit_cost = session[:price_hash][key]*@order.attributes[key] / @order.attributes[key] %>
+                                                    <td><%= "$#{'%.2f' % unit_cost}"%>
+                                                    <td><%= "$#{'%.2f' % (session[:price_hash][key]*@order.attributes[key])}" %></td>
+                                                <% end %>
+                                            <% end %>
+                                            </tr>
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+
+                          <div class="d-flex flex-row-reverse bg-dark text-white p-4">
+                              <div class="py-3 px-5 text-right">
+                                  <div class="mb-2">Total + Shipping</div>
+                                  <div class="h2 font-weight-light"><%="$#{'%.2f' % @order.price}"%></div>
+                              </div>
+                              <%# <%session[:order] = @order%> 
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          <%# </div> %>
+      </div>
+
+
+    <!-- Review Order -->
+    <div class="pt-4 col-md-4 h-100">
+    <div class="pt-2 card col-sm-12" style="border:2px solid #426EDB;">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                <br>
+                <h4>Review Order</h4>
+                <%= form_for(@order, url: add_order_path(@order.property), method: :get) do |g| %>
+                    <%=g.submit "Edit Order", class: "btn btn-warning"%>
+                <%end%>
+            </div>
+            
+            <div class="panel-body">
+                  <div class="col-md-12">
+                      <strong>Subtotal</strong>
+                      <% if @order.filter_freq != 0 && @order.sub_freq != 0%>
+                        <% sub_total = (@order.price - 7)/(@order.sub_freq/@order.filter_freq) %>
+                      <% else %>
+                        <% sub_total = (@order.price - 7) %>
+                      <% end %>
+                      <div class="pull-right">$<span><%="#{'%.2f' % sub_total}"%></span></div>
+                      <hr>
+                  </div>
+
+                  <div class="col-md-12">
+                    <% if @order.filter_freq != 0 %>
+                      <% sub_multiplier = @order.sub_freq / @order.filter_freq%>
+                    <% else %>
+                      <% sub_multiplier = 1 %>
+                    <% end %>
+                      
+                    <% if @order.sub_freq > 0 %>
+                      <small>Subscription</small>
+                      <div class="pull-right"><span><%="$#{'%.2f' % sub_total}"%>  x <%=sub_multiplier%></span></div>
+                      <hr>
+                    <% end %>
+                  </div>
+
+                  <div class="col-md-12">
+                      <small>Shipping</small>
+                      <div class="pull-right"><span>+ $7.00</span></div>
+                      <hr>
+                  </div>
+
+                  <div class="col-md-12">
+                      <strong>Order Total</strong>
+                      <div class="pull-right"><span>$</span><span><%="#{'%.2f' % @order.price}"%></span></div>
+                      <hr>
+                  </div>
+
+                  <div class="col-md-12 text-center">
+                      <strong>Pay with Paypal</strong>
+                      <br><br>
+                  </div>
+
+                  <!-- Paypal Stuff-->
+                  <script
+                    src="https://www.paypal.com/sdk/js?client-id=AYEvKhOwg3t1wPfRKErTkTWRRCpbhMU1-cOMcoBl2P4LydSk55VrkNnNUkm32LRuxtYF1sXNZlv-s6w7">
+                  </script>
+
+                  <div id="paypal-button-container"></div>
+                  <script>
+                    <%@order.price = @order.price*100%>
+                    <%@order.price = @order.price.floor()%>
+                    <%@order.price = @order.price/100%>
+                    var price = <%= @order.price %>;
+                    paypal.Buttons({
+                      //Set up transaction
+                      createOrder: function(data, actions) {
+                        return actions.order.create({
+                          purchase_units: [{
+                            amount: {
+                              value: price
+                            }
+                          }]
+                        });
+                    },
+
+                    //Finalize the transaction
+                    onApprove: function(data, actions) {
+                      return actions.order.capture().then(function(details) {
+                        alert('Transaction completed by ' + details.payer.name.given_name);
+                        window.location.replace("https://okapihomemanagement.herokuapp.com/orders_page");
+                        // Call your server to save the transaction
+                        return fetch('/paypal', {
+                          method: 'post',
+                          headers: {
+                            'content-type': 'application/json'
+                          },
+                          body: JSON.stringify({
+                            orderID: data.orderID
+                          })
+                        });
+                        //window.location.replace("http://localhost:3000/orders_page");
+                      });
+                    }
+                  }).render('#paypal-button-container');
+                  </script>   
+            </div>  
+        </div>
+    </div>
+  </div> 
+  </div>
+
+
+</div>
+<%end%>
+          
+
+
+
+
