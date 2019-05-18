@@ -8,7 +8,7 @@ It might look like our name stands for "okay API" if you are familiar with softw
 # our mission	
 Our mission is to provide rental home owners with a more convenient, stress-free way of managing their rental homes.
 # our tools
-1. Ruby version: 4.5.0	1. 
+1. Ruby version: 4.5.0	1. This is not correct
 2. Rails version: 4.2.10	2. 
 3. Html 	
 4. Embedded Ruby Html (ERB)	

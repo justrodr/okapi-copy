@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - '4.2.10'
+  - 2.4.0
 before_script:
   - bundle exec rake db:create --all
   - bundle exec rake db:migrate
