@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - 2.4.0
 before_install:
-  - gem install bundler
+  - gem install bundle
 before_script:
   - bundle exec bundle install
   - bundle exec rake db:migrate
