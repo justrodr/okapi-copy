@@ -8,6 +8,7 @@ before_script:
   - bundle exec bundle install
   - bundle exec rake db:migrate
 script:
+  - bundle exec rake test
   - bundle exec cucumber
 services:
   - redis-server
