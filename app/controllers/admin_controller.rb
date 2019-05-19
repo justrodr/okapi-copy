@@ -1,5 +1,4 @@
 class AdminController < ApplicationController
-      helper_method :sort_column, :sort_direction
     def admin
          @all_orders = Order.where(canceled: false)
          @order = Order.find_by_id(1)
@@ -7,7 +6,6 @@ class AdminController < ApplicationController
      
     def edit_order
     end
-    
     
     def update_order    
         @order_up = Order.find params[:order][:id]
@@ -32,14 +30,4 @@ class AdminController < ApplicationController
          @order_up.update(next_ship_date: next_ship_str)
         redirect_to admin_path
     end
-   
-  def sortable_columns
-    ["next_ship_date"]
-  end
-  def sort_column
-    sortable_columns.include?(params[:column]) ? params[:column] : "next_ship_date"
-  end
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
 end

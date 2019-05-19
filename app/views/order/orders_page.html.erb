@@ -40,14 +40,14 @@
                         <td><%=count%></td>
                         <td><s><%=order.tenant_name%></s></td>
                         <td><s><%= order.shipping_address %></s></td>
-                        <td><s>TBD</s></td>
+                        <td><s><%=order.delivered_date%></s></td>
                         <td><s><%= "$#{'%.2f' % order.price}"%></s></td>
                         <td><small class="text-muted">Subscription Cancelled</small></td>
                     <%else%>
                         <td><%=count%></td>
                         <td><%=order.tenant_name%></td>
                         <td><%= order.shipping_address %></td>
-                        <td>TBD</td>
+                        <td><%=order.delivered_date%></td>
                         <td class="text-success"><%= "$#{'%.2f' % order.price}"%></td>
                         <td>
                             <%= form_for(order, url: cancel_path(order) ,method: :get) do |c| %>
@@ -78,7 +78,7 @@
                                     <br>
                                     <%= "Quantity: #{order.attributes[key]}" %>
                                     <br>
-                                    <%= "Price: $#{session[:price_hash][key]*order.attributes[key]}" %>
+                                    <%= "Price: $#{'%.2f' % (session[:price_hash][key]*order.attributes[key])}" %>
                                     <br>
                                     <br>
                                 <% end %>

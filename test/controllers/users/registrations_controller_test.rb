@@ -36,7 +36,8 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
   end
   
   test "user object should be nil" do
-    delete :destroy, :user =>{"first_name"=>"a", "last_name"=>"a", "email"=>"john@tamu.edu"}
+    #@controller.destroy
+    delete :destroy, :user =>{"first_name"=>"a", "last_name"=>"a", "email"=>"john@tamu.edu", "id"=>1}
     assert (assigns(:user).nil?)
   end
 

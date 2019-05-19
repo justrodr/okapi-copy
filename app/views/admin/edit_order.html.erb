@@ -59,11 +59,11 @@
                             endDate: '+30d'
                         });
                     </script>
-                <%= f.text_field :delivered_date, 'data-behaviour' => 'datepicker', class: "field-t", :required => true, autocomplete: "off", placeholder: "Delivered Date"%>
+                <%= f.text_field :delivered_date, 'data-behaviour' => 'datepicker', class: "field-t", :required => false, autocomplete: "off", placeholder: "Delivered Date"%>
                     <script type="text/javascript">
                         $('[data-behaviour~=datepicker]').datepicker({
                             startDate: '1d',
-                            endDate: '+30d'
+                            endDate: '+60d'
                         });
                     </script>
             

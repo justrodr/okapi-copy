@@ -103,8 +103,8 @@
                 <%= form_for(@order, url: checkout_path(@order)) do |f| %>
                     <!-- TODO: Need to know what field to be submitted as, formatting -->
                     <h2>Schedule Deliveries</h2>
-                    <h3>Select Start Date</h3>
-                    <%= f.text_field :start_date, 'data-behaviour' => 'datepicker', class: "field-t", :required => true, autocomplete: "off" %>
+                    <h3>Select Subscription Start Date</h3>
+                    <%= f.text_field :start_date, id: "StartDate", 'data-behaviour' => 'datepicker', class: "field-t", :required => true, autocomplete: "off" %>
                     <script type="text/javascript">
                         $('[data-behaviour~=datepicker]').datepicker({
                             startDate: '-1d',
@@ -118,12 +118,12 @@
                 <!-- TODO: Formatting -->
                 
                 <%# <h3>Send Filter Every </h3>  %>
-                <h3>Send Filter Every <%= f.select :filter_freq, [0,1, 2, 3, 4, 6, 12], {class: "form-control dropdown col-md-4 field-t"}, :required => true%>  Month(s)</h3>
+                <h3>Send Filter Every <%= f.select :filter_freq, [0,1, 2, 3, 4, 6, 12], {class: "form-control dropdown col-md-4 field-t"}, :required => true, id: "FilterFreq"%>  Month(s)</h3>
                 <h4>* Select 0 for one time purchase of filter</h4>
             </div>
             <div class="set-length">
                
-                <h3>Subscription Length: <%= f.select :sub_freq, [0,1, 2, 3, 4, 6, 12], {class: "form-control dropdown col-md-4 field-t"},:required => true%> Month(s) </h3>
+                <h3>Subscription Length: <%= f.select :sub_freq, [0,1, 2, 3, 4, 6, 12], {class: "form-control dropdown col-md-4 field-t"},:required => true, id: "SubFreq"%> Month(s) </h3>
                
             </div>
         </div>
@@ -140,31 +140,31 @@
         
                 
                 <tbody>
-                    <tr><td>10x20x1</td><td><%=f.text_field :size10b20, placeholder: "0" %></td></tr>
-                    <tr><td>12x12x1</td><td><%=f.text_field :size12b12, placeholder: "0" %></td></tr>
-                    <tr><td>12x20x1</td><td><%=f.text_field :size12b20, placeholder: "0" %></td></tr>
-                    <tr><td>12x24x1</td><td><%=f.text_field :size12b24, placeholder: "0" %></td></tr>
-                    <tr><td>12x30x1</td><td><%=f.text_field :size12b30, placeholder: "0" %></td></tr>
-                    <tr><td>12x36x1</td><td><%=f.text_field :size12b36, placeholder: "0" %></td></tr>
-                    <tr><td>14x20x1</td><td><%=f.text_field :size14b20, placeholder: "0" %></td></tr>
-                    <tr><td>14x24x1</td><td><%=f.text_field :size14b24, placeholder: "0" %></td></tr>
-                    <tr><td>14x25x1</td><td><%=f.text_field :size14b25, placeholder: "0" %></td></tr>
-                    <tr><td>14x30x1</td><td><%=f.text_field :size14b30, placeholder: "0" %></td></tr>
-                    <tr><td>15x20x1</td><td><%=f.text_field :size15b20, placeholder: "0" %></td></tr>
-                    <tr><td>16x20x1</td><td><%=f.text_field :size16b20, placeholder: "0" %></td></tr>
-                    <tr><td>16x24x1</td><td><%=f.text_field :size16b24, placeholder: "0" %></td></tr>
-                    <tr><td>16x25x1</td><td><%=f.text_field :size16b25, placeholder: "0" %></td></tr>
-                    <tr><td>18x18x1</td><td><%=f.text_field :size18b18, placeholder: "0" %></td></tr>
-                    <tr><td>18x20x1</td><td><%=f.text_field :size18b20, placeholder: "0" %></td></tr>
-                    <tr><td>18x24x1</td><td><%=f.text_field :size18b24, placeholder: "0" %></td></tr>
-                    <tr><td>18x25x1</td><td><%=f.text_field :size18b25, placeholder: "0" %></td></tr>
-                    <tr><td>18x30x1</td><td><%=f.text_field :size18b30, placeholder: "0" %></td></tr>
-                    <tr><td>20x20x1</td><td><%=f.text_field :size20b20, placeholder: "0" %></td></tr>
-                    <tr><td>20x24x1</td><td><%=f.text_field :size20b24, placeholder: "0" %></td></tr>
-                    <tr><td>20x25x1</td><td><%=f.text_field :size20b25, placeholder: "0" %></td></tr>
-                    <tr><td>20x30x1</td><td><%=f.text_field :size20b30, placeholder: "0" %></td></tr>
-                    <tr><td>24x24x1</td><td><%=f.text_field :size24b24, placeholder: "0" %></td></tr>
-                    <tr><td>25x25x1</td><td><%=f.text_field :size25b25, placeholder: "0" %></td></tr>
+                    <tr><td>10x20x1</td><td><%=f.text_field :size10b20, placeholder: "0", id: "size10b20" %></td></tr>
+                    <tr><td>12x12x1</td><td><%=f.text_field :size12b12, placeholder: "0", id: "size12b12" %></td></tr>
+                    <tr><td>12x20x1</td><td><%=f.text_field :size12b20, placeholder: "0", id: "size12b20" %></td></tr>
+                    <tr><td>12x24x1</td><td><%=f.text_field :size12b24, placeholder: "0", id: "size12b24" %></td></tr>
+                    <tr><td>12x30x1</td><td><%=f.text_field :size12b30, placeholder: "0", id: "size12b30" %></td></tr>
+                    <tr><td>12x36x1</td><td><%=f.text_field :size12b36, placeholder: "0", id: "size12b36" %></td></tr>
+                    <tr><td>14x20x1</td><td><%=f.text_field :size14b20, placeholder: "0", id: "size14b20" %></td></tr>
+                    <tr><td>14x24x1</td><td><%=f.text_field :size14b24, placeholder: "0", id: "size14b24" %></td></tr>
+                    <tr><td>14x25x1</td><td><%=f.text_field :size14b25, placeholder: "0", id: "size14b25" %></td></tr>
+                    <tr><td>14x30x1</td><td><%=f.text_field :size14b30, placeholder: "0", id: "size14b30" %></td></tr>
+                    <tr><td>15x20x1</td><td><%=f.text_field :size15b20, placeholder: "0", id: "size15b20" %></td></tr>
+                    <tr><td>16x20x1</td><td><%=f.text_field :size16b20, placeholder: "0", id: "size16b20" %></td></tr>
+                    <tr><td>16x24x1</td><td><%=f.text_field :size16b24, placeholder: "0", id: "size16b24" %></td></tr>
+                    <tr><td>16x25x1</td><td><%=f.text_field :size16b25, placeholder: "0", id: "size16b25" %></td></tr>
+                    <tr><td>18x18x1</td><td><%=f.text_field :size18b18, placeholder: "0", id: "size18b18" %></td></tr>
+                    <tr><td>18x20x1</td><td><%=f.text_field :size18b20, placeholder: "0", id: "size18b20" %></td></tr>
+                    <tr><td>18x24x1</td><td><%=f.text_field :size18b24, placeholder: "0", id: "size18b24" %></td></tr>
+                    <tr><td>18x25x1</td><td><%=f.text_field :size18b25, placeholder: "0", id: "size18b25" %></td></tr>
+                    <tr><td>18x30x1</td><td><%=f.text_field :size18b30, placeholder: "0", id: "size18b30" %></td></tr>
+                    <tr><td>20x20x1</td><td><%=f.text_field :size20b20, placeholder: "0", id: "size20b20" %></td></tr>
+                    <tr><td>20x24x1</td><td><%=f.text_field :size20b24, placeholder: "0", id: "size20b24" %></td></tr>
+                    <tr><td>20x25x1</td><td><%=f.text_field :size20b25, placeholder: "0", id: "size20b25" %></td></tr>
+                    <tr><td>20x30x1</td><td><%=f.text_field :size20b30, placeholder: "0", id: "size20b30" %></td></tr>
+                    <tr><td>24x24x1</td><td><%=f.text_field :size24b24, placeholder: "0", id: "size24b24" %></td></tr>
+                    <tr><td>25x25x1</td><td><%=f.text_field :size25b25, placeholder: "0", id: "size25b25" %></td></tr>
                 </tbody>
             </table>
         </div>

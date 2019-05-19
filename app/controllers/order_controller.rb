@@ -9,10 +9,6 @@ class OrderController < ApplicationController
     def new
         @order = Order.new
     end
-    def create
-        #@current_user = User.find_by(email: session[:email])
-        #@order = Order.new(order_params)
-    end
 
     def cancel
         @cancel_order = Order.find_by(id: params[:id])
@@ -25,50 +21,46 @@ class OrderController < ApplicationController
     end
 
     def paypal
-        @order = session[:order]
-        @order.save
-        order_id = params[:orderID]
+        @order = session[:order];@order.save;order_id = params[:orderID]
         # Creating Access Token for Sandbox
-        client_id = ENV['PAYPAL_CLIENT_ID']
-        client_secret = ENV['PAYPAL_CLIENT_SECRET']
+        client_id = ENV['PAYPAL_CLIENT_ID'];client_secret = ENV['PAYPAL_CLIENT_SECRET'];         environment = PayPal::SandboxEnvironment.new(client_id, client_secret);client = PayPal::PayPalHttpClient.new(environment);request = PayPalCheckoutSdk::Orders::OrdersCaptureRequest::new(order_id);response = client.execute(request);prop1 = Property.find(@order.property);number = @order.sub_freq;@user1 = User.find_by(email: session[:email]); SubscriptionMailer.remind_email(@user1, prop1).deliver_later(wait_until: (number.month - 2.weeks).from_now);  
         # Creating an environment
-        environment = PayPal::SandboxEnvironment.new(client_id, client_secret)
-        client = PayPal::PayPalHttpClient.new(environment)
+
         #request = OrdersGetRequest::new(order_id)
-        request = PayPalCheckoutSdk::Orders::OrdersCaptureRequest::new(order_id)
+        
         # #3. Call PayPal to get the transaction
-        response = client.execute(request) 
+
         # #4. Save the transaction in your database. Implement logic to save transaction to your database for future reference.
-        puts "***************************"
-        puts "Status Code: #"
-        puts "Status: #"
-        #puts response.result.id
-        puts "Order ID: "
-        puts order_id
-        puts "Intent: #"
-        puts "Links:"
-        for link in response.result.links
+        # puts "***************************"
+        # puts "Status Code: #"
+        # puts "Status: #"
+        # #puts response.result.id
+        # puts "Order ID: "
+        # puts order_id
+        # puts "Intent: #"
+        # puts "Links:"
+        #for link in response.result.links
         # You could also call this link.rel or link.href, but method is a reserved keyword for RUBY. Avoid calling link.method.
-        puts "\t#{link["rel"]}: #{link["href"]}\tCall Type: #{link["method"]}"
-        end
-        puts "Gross Amount: # #"
-        puts @order.id
-        prop1 = Property.find(@order.property)
+        #puts "\t#{link["rel"]}: #{link["href"]}\tCall Type: #{link["method"]}"
+        #end
+        # puts "Gross Amount: # #"
+        # puts @order.id
+
         #puts prop1
-        puts "***************************"
-        number = @order.sub_freq
+        #puts "***************************"
+
         #puts number
-        @user1 = User.find_by(email: session[:email])
-        SubscriptionMailer.remind_email(@user1, prop1).deliver_later(wait_until: 1.minutes.from_now)
-        #SubscriptionMailer.remind_email(@user1, prop1).deliver_later(wait_until: (number.month - 2.weeks).from_now)
+
+        #SubscriptionMailer.remind_email(@user1, prop1).deliver_later(wait_until: 1.minutes.from_now)
+        SubscriptionMailer.remind_email(@user1, prop1).deliver_later(wait_until: (number.month - 1.weeks).from_now)
         #redirect_to orders_page_path
     end
     
     def orders_page
                @all_orders = Order.where(user: User.find_by(email: session[:email]).id).order("#{sort_column} #{sort_direction}")
-        puts "&&&&&&&&&&&ALLSIZEALLSIZEALLSIZ&&&&&&&&&&&&"
+        #puts "&&&&&&&&&&&ALLSIZEALLSIZEALLSIZ&&&&&&&&&&&&"
         @all_orders.size
-        puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+        #puts "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&s"
         
     end
 
@@ -99,11 +91,11 @@ class OrderController < ApplicationController
         @order.city = @property.city
         @order.state = @property.state
         @order.zipcode = @property.zipcode
-        puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
-        puts params[:order][:start_date].class
+        #puts "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+        #puts params[:order][:start_date].class
         @order.start_date = params[:order][:start_date]
-        puts @order.start_date
-        puts @order.filter_freq
+        #puts @order.start_date
+        #puts @order.filter_freq
         @order.user = @current_user.id
         small_keys = []
         total_price = [] 
@@ -140,10 +132,10 @@ class OrderController < ApplicationController
                         valid_quantity = false
                     end 
                         no_filter = false
-                        puts @order.sub_freq
+                        #puts @order.sub_freq
                         total_price.push session[:price_hash][key]*@order.attributes[key]*sub_multiplier
-                        puts "Sub multiplier"
-                        puts sub_multiplier
+                        #puts "Sub multiplier"
+                        #puts sub_multiplier
                 end
             end
 
@@ -163,10 +155,10 @@ class OrderController < ApplicationController
         end
        
         @order.price = total_price.inject(0){|sum,x| sum + x }+7.00 #plus 7 is for shipping
-        puts @order.price
-        puts "******************USERUSERUSERUSERUSERUSER*******************"
-        puts @order.user
-        puts "*************************************************************"
+        # puts @order.price
+        # puts "******************USERUSERUSERUSERUSERUSER*******************"
+        # puts @order.user
+        # puts "*************************************************************"
         session[:order] = @order
         @order.next_ship_date = @order.start_date
         redirect_to view_checkout_path(@order)

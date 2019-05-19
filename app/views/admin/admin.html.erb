@@ -15,13 +15,14 @@
                         <th>Address</th>
                         <th>Last Sent</th>
                         <th>Last Delivered</th>
-                        <th><%= sort_link "next_ship_date", "Next Ship Date &#8597"%></th>
+                        <th>Next Ship Date</th>
 						<th>Filter Size</th>
 						<th>Filter Quantity</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% @all_orders.each do |order| %>
+                        <% if order.canceled == false %>
                     
                         <tr>
                             <%if(Property.find_by(id: order.property))%>
@@ -72,11 +73,12 @@
                                 <% end %>
                             </td>
                             <td>
-                               <%= link_to '<i class="material-icons" style="font-size:25px;color:#28a745;padding-right:10px">Log Sent</i>'.html_safe, edit_order_path(order), method: :get, class: "float-left" %> 
+                               <%= link_to '<i class="material-icons" style="font-size:25px;color:#28a745;padding-right:10px">Log Sent</i>'.html_safe, edit_order_path(order), method: :get, class: "float-left", id:"logsent#{order.shipping_address}"  %> 
                             
                             
                             </td>
-                        </tr>    
+                        </tr>   
+                        <% end %>
                     <% end %>
                 </tbody>
             </table>

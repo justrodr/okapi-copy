@@ -21,7 +21,9 @@ Given("I am on the home page") do
   end
 
   Given("I am on the login page") do
-    visit new_user_session_path
+    visit root_path
+    click_on("Login")
+    assert page.current_path, '/users/sign_in'
   end
   
   When("I enter invalid login information") do

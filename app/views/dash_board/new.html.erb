@@ -79,6 +79,7 @@ $(document).ready(function(){
 	                            <td>
 	                            	<% Order.where(property: prop.id).each do |ord| %>
 										<%if ord.canceled == false%>
+										<p>Time Until Next Shipment</p>
 	                                	<div id="myProgress">
 	  										<div class="myBar" id="<%= ord.id %>"></div>
 										</div>
@@ -154,7 +155,8 @@ $(document).ready(function(){
 												}
 											</script>
 											<div>
-												<p>Last Delivered: <%= ord.delivered_date %></p>
+												<p>Next Ship Date: <%= ord.next_ship_date %></p>
+												<p>Ships Every <%= ord.filter_freq %> Months</p>
 											</div>
 											<% end %>
 										<%end %>
@@ -166,10 +168,10 @@ $(document).ready(function(){
                                 <!---- Display action buttons ------>
 								<td>
 									<div class="float-left">
-										<%= link_to '<i class="material-icons" style="font-size:25px;color:#28a745;padding-right:10px">add_shopping_cart</i>'.html_safe, add_order_path(prop), method: :get, class: "float-left",title: "Place Order", id: "add#{prop.prop_name}" %>
-										<%= link_to '<i class="material-icons" style="font-size:25px;color:#1da1f2;padding-right:10px">edit</i>'.html_safe, edit_property_path(prop), method: :get, class: "float-left", title: "Edit Property",id: "edit#{prop.prop_name}" %>
-										<%= link_to '<i class="material-icons" style="font-size:25px;color:#fbbe19;padding-right:10px">visibility</i>'.html_safe, property_path(prop), method: :get, class: "float-left", title: "View Property Details",id: "view#{prop.prop_name}" %>
-										<%= link_to '<i class="material-icons" style="font-size:25px;color:#dc3545;padding-right:10px">delete</i>'.html_safe, property_path(prop), method: :delete, class:"float-left",title: "Delete Property",id: "delete#{prop.prop_name}", data: { confirm: "Are you sure you want to delete this property? \nThis action cannot be undone."} %>
+										<%= link_to '<i class="material-icons" style="font-size:25px;color:#28a745;padding-right:10px">add_shopping_cart</i>'.html_safe, add_order_path(prop), method: :get, class: "float-left",title: "Place Order", id: "add#{prop.address}" %>
+										<%= link_to '<i class="material-icons" style="font-size:25px;color:#1da1f2;padding-right:10px">edit</i>'.html_safe, edit_property_path(prop), method: :get, class: "float-left", title: "Edit Property",id: "edit#{prop.address}" %>
+										<%= link_to '<i class="material-icons" style="font-size:25px;color:#fbbe19;padding-right:10px">visibility</i>'.html_safe, property_path(prop), method: :get, class: "float-left", title: "View Property Details",id: "view#{prop.address}" %>
+										<%= link_to '<i class="material-icons" style="font-size:25px;color:#dc3545;padding-right:10px">delete</i>'.html_safe, property_path(prop), method: :delete, class:"float-left",title: "Delete Property",id: "delete#{prop.address}", data: { confirm: "Are you sure you want to delete this property? \nThis action cannot be undone."} %>
 									</div>
 								</td>
 								<!---- End display action buttons ------>

@@ -13,9 +13,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       current_user.apply_omniauth(request.env["omniauth.auth"])
       redirect_to edit_user_registration_path, notice: "Facebook Account Linked!"
     else
-      @user = User.from_omniauth(request.env["omniauth.auth"])
-      session[:email] = @user.email
-      sign_in_and_redirect @user
+      @user = User.from_omniauth(request.env["omniauth.auth"]);session[:email] = @user.email;sign_in_and_redirect @user
     end
   end
 
