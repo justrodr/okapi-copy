@@ -26,13 +26,19 @@ Background: properties in database
             When I click on "Subscriptions"
             Then I should be on the Subscriptions page
 
-        Scenario: Viewing the Add Subscription page
-            Given I am on the Dashboard page for Jane Doe
-            When I click on "add123 Bob st"
-            Then I should be on the Add Subscription page
+        Scenario: Placing an order
+            Given I am on the Subscriptions page
+            When I fill out correct order information
+            And I click on "Submit"
+            Then I should see that my order has been placed
 
         Scenario: Admin login 
             When I am on the login page
             And I enter Admin login information
             And I click on "Log In"
             Then I should be on the Admin Dashboard
+
+        Scenario: Admin updating an order status
+            Given I am on the Admin Dashboard
+            When I update the status of an order from shipped to delivered
+            Then I should see that reflected in the table

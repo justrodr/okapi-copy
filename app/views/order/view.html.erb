@@ -257,6 +257,9 @@
                     <%@order.price = @order.price*100%>
                     <%@order.price = @order.price.floor()%>
                     <%@order.price = @order.price/100%>
+                    <% puts "88888888888888888888888888" %>
+                    <% puts @order.price %>
+                    <% puts "88888888888888888888888888" %>
                     var price = <%= @order.price %>;
                     paypal.Buttons({
                       //Set up transaction
@@ -274,7 +277,7 @@
                     onApprove: function(data, actions) {
                       return actions.order.capture().then(function(details) {
                         alert('Transaction completed by ' + details.payer.name.given_name);
-                        window.location.replace("https://okapihomemanagement.herokuapp.com/orders_page");
+                        window.location.replace("http://localhost:3000/orders_page");
                         // Call your server to save the transaction
                         return fetch('/paypal', {
                           method: 'post',

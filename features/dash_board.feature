@@ -14,6 +14,11 @@ Feature: View Dashboard
         Given I am on the Dashboard page for Jane Doe
         Then I should see a table of my properties
 
+    # Scenario: Accessing Payment 
+    #     Given I am on the Dashboard page for Jane Doe
+    #     When I click on "Payment"
+    #     Then I should be on my Payment page
+
     Scenario: Accessing Subscriptions 
         Given I am on the Dashboard page for Jane Doe
         When I click on "Subscriptions"

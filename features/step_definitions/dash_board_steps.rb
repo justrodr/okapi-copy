@@ -17,19 +17,19 @@ Given("I am on the Dashboard page for Jane Doe") do
     assert_current_path(dash_path)
     click_on("Add New Property")
     fill_in 'property[address]', with: "123 Bob st"
-    fill_in 'property[city]', with: "Bryan"
-    fill_in 'property[state]', with: "TX"
-    fill_in 'property[zipcode]', with: "77801"
-    fill_in "Property Name (Optional)", with: "Home"
-    fill_in 'property[tenant_email]', with: 'bob@gmail.com'
-    fill_in "Tenant Name", with: "Bob Hope"
+    fill_in "Property Name (Optional)", with: "Bob"
+    fill_in "Tenant Name", with: "Home"
+    fill_in "Tenant Email", with: "Bob@email.com"
     click_on("Add Property")
   end
   
   Then("I should see a table of my properties") do
     assert page.has_css?('table')
   end
-
+   
+  Then("I should be on my Payment page") do
+    assert page.current_path, 'payment_page'
+  end
   
   Then("I should be on my Subscriptions page") do
     assert page.current_path, 'orders_page'
